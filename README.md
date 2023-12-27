@@ -122,7 +122,7 @@
 
 | Method               | POST                                             |
 |----------------------|--------------------------------------------------|
-| **URI**              | /cart                                            |
+| **URI**              | /carts                                           |
 | **HTTP status code** | Success: 201, Fail: 400                          |
 | **Request Body**     | { bookId: 도서 id, count: 수량 }                  |
 | **Response Body**    |                                                  |
@@ -137,7 +137,7 @@
 
 | Method               | GET                                              |
 |----------------------|--------------------------------------------------|
-| **URI**              | /cart                                            |
+| **URI**              | /carts                                           |
 | **HTTP status code** | Success: 200, Fail: 404                          |
 | **Request Body**     |                                                  |
 | **Response Body**    | [ { cartItemId: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 }, { cartItemId: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 } ... ] |
@@ -146,7 +146,7 @@
 
 | Method               | DELETE                  |
 |----------------------|-------------------------|
-| **URI**              | /cart/{bookId}          |
+| **URI**              | /carts/{bookId}         |
 | **HTTP status code** | Success: 200, Fail: 400 |
 | **Request Body**     |                         |
 | **Response Body**    |                         |
