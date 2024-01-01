@@ -1,7 +1,8 @@
-# API-design
+## ⚙ API-design (현재 수정중)
 
-## ⚙ 회원 API
-
+<details>
+<summary> 👩‍💻 회원 API </summary>
+  
 ### 회원가입
 
 - 이메일
@@ -47,9 +48,10 @@
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     | { password: "string" }   |
 | **Response Body**    |                          |
+</details>
 
-
-## ⚙ 도서 API
+<details>
+<summary> 📚 도서 API </summary>
 
 ### 전체 도서 조회
 
@@ -65,7 +67,7 @@
 | **URI**              | /books                   |
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     |                          |
-| **Response Body**    | [ { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일"} ... ]        |
+| **Response Body**    | [ { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일"} ... ] |
 
 ### 개별 도서 조회
 
@@ -88,7 +90,7 @@
 | **URI**              | /books/{bookId}          |
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     |                          |
-| **Response Body**    | { id: 도서 id, title: "제목", category: "카테고리", format: "포맷", ISBN: ISBN, summary: "요약 정보", description: "상세 설명" , author: "작가", pages: 쪽 수, index: "목차", price: 가격, likes: 좋아요 수, liked: boolean, pubDate: "출간일" } |
+| **Response Body**    | { id: 도서 id, title: "제목", category: "카테고리", format: "포맷", ISBN: ISBN, summary: "요약 정보", description: "상세 설명" , author: "작가", pages: 쪽 수, index: "목차", price: 가격, likes: 좋아요 수, pubDate: "출간일" } |
 
 ### 카테고리별 도서 목록 조회
 
@@ -97,26 +99,38 @@
 
 | Method               | GET                      |
 |----------------------|--------------------------|
-| **URI**              | /books?categoryId={category}&new={boolean} |
+| **URI**              | /books?categoryId={categoryId}&new={boolean} |
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     |                          |
-| **Response Body**    | [ { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" } ... ]        |
+| **Response Body**    | [ { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" } ... ] |
+</details>
 
-
-
-## ⚙ 좋아요 API
+<details>
+<summary> 👍 좋아요 API </summary>
 
 ### 좋아요 추가
 
-| Method               | PUT                                              |
+| Method               | POST                                             |
+|----------------------|--------------------------------------------------|
+| **URI**              | /likes/{bookId}                                  |
+| **HTTP status code** | Success: 201, Fail: 400                          |
+| **Request Body**     |                                                  |
+| **Response Body**    |                                                  |
+
+
+### 좋아요 취소
+
+| Method               | DELETE                                           |
 |----------------------|--------------------------------------------------|
 | **URI**              | /likes/{bookId}                                  |
 | **HTTP status code** | Success: 200, Fail: 400                          |
 | **Request Body**     |                                                  |
 | **Response Body**    |                                                  |
 
+</details>
 
-## ⚙ 장바구니 API
+<details>
+<summary> 🛍 장바구니 API </summary>
 
 ### 장바구니 담기
 
@@ -140,7 +154,7 @@
 | **URI**              | /carts                                           |
 | **HTTP status code** | Success: 200, Fail: 404                          |
 | **Request Body**     |                                                  |
-| **Response Body**    | [ { cartItemId: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 }, { cartItemId: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 } ... ] |
+| **Response Body**    | [ { id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 }, <br>{ id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 } ... ] |
 
 ### 장바구니 도서 삭제
 
@@ -151,17 +165,50 @@
 | **Request Body**     |                         |
 | **Response Body**    |                         |
 
+### 장바구니 주문 예상 상품 목록 조회
 
-
-## ⚙ 주문 API
-
-- 장바구니에서 체크된 상품에 대한 주문 요청 (제목, 요약 정보, 가격)
-
-### 장바구니에서 선택한 상품 목록 조회
+- 장바구니에서 체크된 상품에 대한 주문 예상 상품 목록 조회 (제목, 요약 정보, 가격)
 
 | Method               | GET                                              |
 |----------------------|--------------------------------------------------|
-| **URI**              | /..                                          |
+| **URI**              | /..                                              |
+| **HTTP status code** | Success: 200, Fail: 404                          |
+| **Request Body**     | [ cartItemId, cartItemId, ... ]                  |
+| **Response Body**    | [ { cartItemId: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 }, <br>{ cartItemId: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 } ... ] |
+
+</details>
+
+<details>
+<summary> 💸 결제 API </summary>
+
+### 결제하기 (주문 등록)
+
+- 주문 등록 insert
+- 장바구니에서 주문된 상품은 delete
+
+| Method               | POST                                             |
+|----------------------|--------------------------------------------------|
+| **URI**              | /orders                                          |
+| **HTTP status code** | Success: 200, Fail: 400                          |
+| **Request Body**     | { items: [{ cartItemId: 장바구니 도서 id, bookId: 도서 id, count: 수량 }, ...], delivery: {address: '주소', receiver: '수령인', contact: '010-0000-0000'}, totalPrice: 총 금액 } |
+| **Response Body**    |                                                  |
+
+### 주문 내역 조회
+
+| Method               | GET                                              |
+|----------------------|--------------------------------------------------|
+| **URI**              | /orders                                          |
 | **HTTP status code** | Success: 200, Fail: 404                          |
 | **Request Body**     |                                                  |
-| **Response Body**    | [ { cartItemId: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 }, { cartItemId: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 } ... ] |
+| **Response Body**    | [ { order_id: 주문 id, created_at: '주문 일자', delivery: {address: '주소', receiver: '수령인', contact: '010-0000-0000'}, bookTitle: '대표 책 제목', totalPrice: 총 금액, totalCount: 총 수량 }, ... ] |
+
+### 주문 내역 상품 상세 조회
+
+| Method               | GET                                              |
+|----------------------|--------------------------------------------------|
+| **URI**              | /orders/{orderId}                                |
+| **HTTP status code** | Success: 200, Fail: 404                          |
+| **Request Body**     |                                                  |
+| **Response Body**    | [{ bookId: 도서 id, book_title: '도서 제목', author: '작가명', price: 가격, count: 수량 }, ... ] |
+
+</details>
