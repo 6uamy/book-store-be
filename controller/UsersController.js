@@ -9,7 +9,7 @@ const join = (req, res) => {
 
     // 비밀번호 암호화
     const salt = crypto.randomBytes(10).toString('base64');
-    const hashPassword = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
+    const hashPassword = encryptionPassword(password, salt);
 
     const sql = `INSERT INTO users (email, password, salt) VALUES (?, ?, ?)`;
     const values = [email, hashPassword, salt];
@@ -35,7 +35,7 @@ const login = (req, res) => {
             const loginUser = results[0];
             
             const salt = loginUser ? loginUser.salt : '';
-            const hashPassword = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
+            const hashPassword = encryptionPassword(password, salt);
             if (loginUser && loginUser.password === hashPassword) {
                 // 토큰 발급
                 const token = jwt.sign({ 
@@ -80,7 +80,7 @@ const passwordReset = (req, res) => {
     const {email, password} = req.body;
 
     const salt = crypto.randomBytes(10).toString('base64');
-    const hashPassword = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
+    const hashPassword = encryptionPassword(password, salt);
 
     const sql = `UPDATE users SET password = ?, salt = ? WHERE email = ?`;
     let values = [hashPassword, salt, email];
@@ -93,5 +93,9 @@ const passwordReset = (req, res) => {
         results.affectedRows === 0 ? res.status(StatusCodes.BAD_REQUEST).end() : res.status(StatusCodes.OK).json(results);
     });
 };
+
+function encryptionPassword(password, salt) {
+    return crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
+}
 
 module.exports = {join, login, passwordResetRequest, passwordReset};
