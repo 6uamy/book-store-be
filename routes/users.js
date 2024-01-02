@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const conn = require('../mariadb');
 const {body, param, validationResult} = require('express-validator');
+const {StatusCodes} = require('http-status-codes');
 
 router.use(express.json());
 
@@ -11,7 +12,7 @@ const validate = (req, res, next) => {
     if (err.isEmpty()) {
         return next();
     } else {
-        return res.status(400).json(err.array());
+        return res.status(StatusCodes.BAD_REQUEST).json(err.array());
     }
 }
 
@@ -21,20 +22,21 @@ router.post('/join',
         body('email').notEmpty().isEmail().withMessage('이메일 입력'),
         body('password').notEmpty().isString().withMessage('비밀번호 입력'),
         validate
-    ]
-    , (req, res) => {
+    ], 
+    (req, res) => {
         const sql = `INSERT INTO users (email, password) VALUES (?, ?)`;
         const {email, password} = req.body;
         const values = [email, password];
 
         conn.query(sql, values, (err, results) => {
             if (err) {
-                return res.status(400).end();
+                return res.status(StatusCodes.BAD_REQUEST).end();
             }
 
-            res.status(201).json(results);
+            return res.status(StatusCodes.CREATED).json(results);
         });
-});
+    }
+);
 
 // 로그인
 router.post('/login', (req, res) => {
