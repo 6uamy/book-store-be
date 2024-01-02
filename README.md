@@ -22,10 +22,10 @@
 
 | Method               | POST                                             |
 |----------------------|--------------------------------------------------|
-| **URI**              | /users/login                                      |
+| **URI**              | /users/login                                     |
 | **HTTP status code** | Success: 200, Fail: 404                          |     
 | **Request Body**     | { email: "string@mail.com", password: "string" } |
-| **Response Body**    | JWT Token                                        |
+| **Response Cookie**  | cookie: JWT Token                                |
 
 ### 비밀번호 초기화 요청
 
