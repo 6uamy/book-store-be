@@ -3,6 +3,7 @@ const router = express.Router();
 const conn = require('../mariadb');
 const {body, param, validationResult} = require('express-validator');
 const {StatusCodes} = require('http-status-codes');
+const join = require('../controller/UsersController');
 
 router.use(express.json());
 
@@ -23,19 +24,7 @@ router.post('/join',
         body('password').notEmpty().isString().withMessage('비밀번호 입력'),
         validate
     ], 
-    (req, res) => {
-        const sql = `INSERT INTO users (email, password) VALUES (?, ?)`;
-        const {email, password} = req.body;
-        const values = [email, password];
-
-        conn.query(sql, values, (err, results) => {
-            if (err) {
-                return res.status(StatusCodes.BAD_REQUEST).end();
-            }
-
-            return res.status(StatusCodes.CREATED).json(results);
-        });
-    }
+    join
 );
 
 // 로그인
