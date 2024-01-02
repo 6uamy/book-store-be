@@ -1,15 +1,21 @@
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const dotenv = require('dotenv').config();
 
 const join = (req, res) => {
-    const sql = `INSERT INTO users (email, password) VALUES (?, ?)`;
     const {email, password} = req.body;
-    const values = [email, password];
 
+    // 비밀번호 암호화
+    const salt = crypto.randomBytes(10).toString('base64');
+    const hashPassword = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
+
+    const sql = `INSERT INTO users (email, password, salt) VALUES (?, ?, ?)`;
+    const values = [email, hashPassword, salt];
     conn.query(sql, values, (err, results) => {
         if (err) {
+            console.log(err)
             return res.status(StatusCodes.BAD_REQUEST).end();
         }
 
@@ -27,7 +33,10 @@ const login = (req, res) => {
             }
 
             const loginUser = results[0];
-            if (loginUser && loginUser.password === password) {
+            
+            const salt = loginUser ? loginUser.salt : '';
+            const hashPassword = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
+            if (loginUser && loginUser.password === hashPassword) {
                 // 토큰 발급
                 const token = jwt.sign({ 
                     email: loginUser.email
@@ -70,8 +79,11 @@ const passwordResetRequest = (req, res) => {
 const passwordReset = (req, res) => {
     const {email, password} = req.body;
 
-    const sql = `UPDATE users SET password = ? WHERE email = ?`;
-    let values = [password, email];
+    const salt = crypto.randomBytes(10).toString('base64');
+    const hashPassword = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
+
+    const sql = `UPDATE users SET password = ?, salt = ? WHERE email = ?`;
+    let values = [hashPassword, salt, email];
     conn.query(sql, values, (err, results) => {
         if (err) {
             console.log(err);
