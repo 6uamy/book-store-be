@@ -54,11 +54,32 @@ const login = (req, res) => {
 };
 
 const passwordResetRequest = (req, res) => {
-    res.json('비밀번호 초기화 요청');
+    const {email} = req.body;
+
+    const sql = `SELECT * FROM users WHERE email = ?`;
+    conn.query(sql, email, (err, results) => {
+        if (err) {
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        }
+
+        const user = results[0];
+        user ? res.status(StatusCodes.OK).json({email : email}) : res.status(StatusCodes.UNAUTHORIZED).end();
+    });
 };
 
 const passwordReset = (req, res) => {
-    res.json('비밀번호 초기화');
+    const {email, password} = req.body;
+
+    const sql = `UPDATE users SET password = ? WHERE email = ?`;
+    let values = [password, email];
+    conn.query(sql, values, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        }
+
+        results.affectedRows === 0 ? res.status(StatusCodes.BAD_REQUEST).end() : res.status(StatusCodes.OK).json(results);
+    });
 };
 
 module.exports = {join, login, passwordResetRequest, passwordReset};

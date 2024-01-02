@@ -35,18 +35,19 @@
 |----------------------|------------------------------|
 | **URI**              | /users/reset                 |
 | **HTTP status code** | Success: 200, Fail: 404      |
-| **Request Body**     | { email: "string@mail.com" } |
-| **Response Body**    |                              |
+| **Request Body**     | { email: "사용자가 입력한 이메일" } |
+| **Response Body**    | { email: "이메일" } |
 
 ### 비밀번호 초기화 (=수정)
 
+- 이메일
 - 비밀번호
 
 | Method               | PUT                      |
 |----------------------|--------------------------|
 | **URI**              | /users/reset             |
 | **HTTP status code** | Success: 200, Fail: 404  |
-| **Request Body**     | { password: "string" }   |
+| **Request Body**     | { email: "이전 페이지에서 입력한 이메일" password: "string" } |
 | **Response Body**    |                          |
 </details>
 
