@@ -95,12 +95,12 @@
 
 ### 카테고리별 도서 목록 조회
 
-- new: true => 신간 조회 (기준: 출간일 30일 이내)
+- new: true => 신간 조회 (기준: 출간일 1달 이내)
 
 
 | Method               | GET                      |
 |----------------------|--------------------------|
-| **URI**              | /books?categoryId={categoryId}&new={boolean} |
+| **URI**              | /books?categoryId={category_id}&new_book={boolean} |
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     |                          |
 | **Response Body**    | [ { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" } ... ] |

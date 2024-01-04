@@ -2,29 +2,29 @@ const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
 
 const allBooks = (req, res) => {
-    const {category_id} = req.query;
+    const {category_id, new_book} = req.query;
+    let sql = `SELECT * FROM books`;
+    let values = [];
 
-    if (category_id) {
-        const sql = `SELECT * FROM books WHERE category_id = ?`;
-        conn.query(sql, category_id, (err, results) => {
-            if (err) {
-                console.log(err);
-                return res.status(StatusCodes.BAD_REQUEST).end();
-            }
-            
-            results.length ? res.status(StatusCodes.OK).json(results) : res.status(StatusCodes.NOT_FOUND).end();
-        });
-    } else {
-        const sql = `SELECT * FROM books`;
-        conn.query(sql, (err, results) => {
-            if (err) {
-                console.log(err);
-                return res.status(StatusCodes.BAD_REQUEST).end();
-            }
-            
-            return res.status(StatusCodes.OK).json(results);
-        });
+    if (category_id && new_book) {
+        values = [category_id, new_book];
+        JSON.parse(new_book) === true ? sql += ` WHERE category_id = ? AND pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()` : sql += ` WHERE category_id = ?`;
+    } else if (category_id) {
+        values = category_id;
+        sql += ` WHERE category_id = ?`;
+    } else if (new_book) {
+        values = new_book;
+        if (JSON.parse(new_book) === true) sql += ` WHERE pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()`;
     }
+
+    conn.query(sql, values, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        }
+        
+        results.length ? res.status(StatusCodes.OK).json(results) : res.status(StatusCodes.NOT_FOUND).end();
+    });
 };
 
 const bookDetail = (req, res) => {
