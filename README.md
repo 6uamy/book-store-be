@@ -104,6 +104,23 @@
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     |                          |
 | **Response Body**    | [ { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" } ... ] |
+
+</details>
+
+<details>
+<summary> 🧩 카테고리 API </summary>
+
+### 카테고리 전체 조회
+
+- 메인 페이지
+
+| Method               | GET                      |
+|----------------------|--------------------------|
+| **URI**              | /category                |
+| **HTTP status code** | Success: 200, Fail: 404  |
+| **Request Body**     |                          |
+| **Response Body**    |  [ { id: 카테고리 id, name: "카테고리 종류" }, { id: 카테고리 id, name: "카테고리 종류" } ... ] |
+
 </details>
 
 <details>
