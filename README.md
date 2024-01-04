@@ -68,7 +68,7 @@
 | **URI**              | /books                   |
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     |                          |
-| **Response Body**    | [ { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일"} ... ] |
+| **Response Body**    | [ { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일"} ... ] |
 
 ### 개별 도서 조회
 
@@ -91,7 +91,7 @@
 | **URI**              | /books/{bookId}          |
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     |                          |
-| **Response Body**    | { id: 도서 id, title: "제목", category: "카테고리", format: "포맷", ISBN: ISBN, summary: "요약 정보", description: "상세 설명" , author: "작가", pages: 쪽 수, index: "목차", price: 가격, likes: 좋아요 수, pubDate: "출간일" } |
+| **Response Body**    | { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), category: "카테고리", format: "포맷", ISBN: ISBN, summary: "요약 정보", description: "상세 설명" , author: "작가", pages: 쪽 수, index: "목차", price: 가격, likes: 좋아요 수, pubDate: "출간일" } |
 
 ### 카테고리별 도서 목록 조회
 
@@ -103,7 +103,7 @@
 | **URI**              | /books?categoryId={categoryId}&new={boolean} |
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     |                          |
-| **Response Body**    | [ { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" } ... ] |
+| **Response Body**    | [ { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" } ... ] |
 </details>
 
 <details>
