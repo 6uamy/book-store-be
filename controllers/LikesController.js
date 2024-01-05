@@ -2,11 +2,11 @@ const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
 
 const addLikes = (req, res) => {
-    const {liked_book_id} = req.params;
+    const {book_id} = req.params;
     const {user_id} = req.body;
 
     const sql = `INSERT INTO likes (user_id, liked_book_id) VALUES (?, ?)`;
-    const values = [user_id, liked_book_id];
+    const values = [user_id, book_id];
     conn.query(sql, values, (err, results) => {
         if (err) {
             console.log(err);
@@ -17,8 +17,8 @@ const addLikes = (req, res) => {
     });
 }
 
-const removeLikes = (req, res) => {
+const cancelLikes = (req, res) => {
     res.json('좋아요 취소');
 }
 
-module.exports = {addLikes, removeLikes};
+module.exports = {addLikes, cancelLikes};
