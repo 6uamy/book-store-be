@@ -13,12 +13,24 @@ const addLikes = (req, res) => {
             return res.status(StatusCodes.BAD_REQUEST).end();
         }
 
-        return res.status(StatusCodes.CREATED).json(results);
+        return results.affectedRows === 0 ? res.status(StatusCodes.BAD_REQUEST).end() : res.status(StatusCodes.CREATED).json(results);
     });
 }
 
 const cancelLikes = (req, res) => {
-    res.json('좋아요 취소');
+    const {book_id} = req.params;
+    const {user_id} = req.body;
+
+    const sql = `DELETE FROM likes WHERE user_id = ? AND liked_book_id = ?`;
+    const values = [user_id, book_id];
+    conn.query(sql, values, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        }
+
+        return results.affectedRows === 0 ? res.status(StatusCodes.BAD_REQUEST).end() : res.status(StatusCodes.OK).json(results);
+    });
 }
 
 module.exports = {addLikes, cancelLikes};
