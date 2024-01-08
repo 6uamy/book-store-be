@@ -159,7 +159,7 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /carts                                           |
 | **HTTP status code** | Success: 201, Fail: 400                          |
-| **Request Body**     | { bookId: 도서 id, count: 수량 }                  |
+| **Request Body**     | { book_id: 도서 id, quantity: 수량 }              |
 | **Response Body**    |                                                  |
 
 ### 장바구니 조회
