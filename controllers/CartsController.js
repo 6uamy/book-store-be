@@ -17,7 +17,19 @@ const addCartsItem = (req, res) => {
 };
 
 const selectCartsItem = (req, res) => {
-    res.json('장바구니 목록 조회');
+    const {user_id} = req.body;
+    const sql = `SELECT C.id, C.book_id, B.title, B.summary, C.quantity, B.price 
+                FROM cartItems AS C
+                LEFT JOIN books AS B ON C.book_id = B.id 
+                WHERE user_id = ?`;
+    conn.query(sql, user_id, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        }
+        
+        return results.length ? res.status(StatusCodes.OK).json(results) : res.status(StatusCodes.NOT_FOUND).end();
+    });
 };
 
 const removeCartsItem = (req, res) => {
