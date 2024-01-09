@@ -33,7 +33,17 @@ const selectCartsItem = (req, res) => {
 };
 
 const removeCartsItem = (req, res) => {
-    res.json('장바구니 삭제');
+    const {id} = req.params;
+
+    const sql = `DELETE FROM cartItems WHERE id = ?`;
+    conn.query(sql, id, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        }
+
+        return results.affectedRows === 0 ? res.status(StatusCodes.BAD_REQUEST).end() : res.status(StatusCodes.OK).json(results);
+    });
 };
 
 module.exports = {addCartsItem, selectCartsItem, removeCartsItem};
