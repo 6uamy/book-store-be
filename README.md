@@ -200,7 +200,7 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /orders                                          |
 | **HTTP status code** | Success: 200, Fail: 400                          |
-| **Request Body**     | { items: [{ cartItemId: 장바구니 도서 id, bookId: 도서 id, count: 수량 }, ...], delivery: {address: '주소', receiver: '수령인', contact: '010-0000-0000'}, totalPrice: 총 금액 } |
+| **Request Body**     | { items: [{ cartItemId: 장바구니 도서 id, bookId: 도서 id, quantity: 수량 }, ...], delivery: {address: '주소', receiver: '수령인', contact: '010-0000-0000'}, totalPrice: 총 금액 } |
 | **Response Body**    |                                                  |
 
 ### 주문 내역 조회
