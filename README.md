@@ -162,7 +162,7 @@
 | **Request Body**     | { book_id: 도서 id, quantity: 수량 }              |
 | **Response Body**    |                                                  |
 
-### 장바구니 조회
+### 장바구니 조회 / 선택한 장바구니 상품 목록 조회
 
 - 대표이미지
 - 제목
@@ -174,7 +174,7 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /carts                                           |
 | **HTTP status code** | Success: 200, Fail: 404                          |
-| **Request Body**     |                                                  |
+| **Request Body**     | { userId: 회원 id, selected: [cartItemsId, cartItemsId ... ] } |
 | **Response Body**    | [ { id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 }, <br>{ id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 } ... ] |
 
 ### 장바구니 도서 삭제
@@ -185,17 +185,6 @@
 | **HTTP status code** | Success: 200, Fail: 400 |
 | **Request Body**     |                         |
 | **Response Body**    |                         |
-
-### 장바구니 주문 예상 상품 목록 조회
-
-- 장바구니에서 체크된 상품에 대한 주문 예상 상품 목록 조회 (제목, 요약 정보, 가격)
-
-| Method               | GET                                              |
-|----------------------|--------------------------------------------------|
-| **URI**              | /..                                              |
-| **HTTP status code** | Success: 200, Fail: 404                          |
-| **Request Body**     | [ cartItemId, cartItemId, ... ]                  |
-| **Response Body**    | [ { cartItemId: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 }, <br>{ cartItemId: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 } ... ] |
 
 </details>
 
