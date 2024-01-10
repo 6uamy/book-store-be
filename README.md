@@ -222,3 +222,10 @@
 | **Response Body**    | [{ bookId: 도서 id, book_title: '도서 제목', author: '작가명', price: 가격, count: 수량 }, ... ] |
 
 </details>
+
+## 📐 ERD (현재 수정중)
+
+<details>
+  <summary> 🛒 Book shop </summary>
+<img src='https://github.com/6uamy/API-design/assets/79950091/0babd081-caf6-4750-bd8c-86732252d711'>
+</details>
