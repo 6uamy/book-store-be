@@ -200,7 +200,7 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /orders                                          |
 | **HTTP status code** | Success: 200, Fail: 400                          |
-| **Request Body**     | { items: [{ cartItemId: 장바구니 도서 id, bookId: 도서 id, quantity: 수량 }, ...], delivery: {address: '주소', receiver: '수령인', contact: '010-0000-0000'}, totalPrice: 총 금액 } |
+| **Request Body**     | { items: [{ cartItemId: 장바구니 도서 id, bookId: 도서 id, quantity: 수량 }, ...], delivery: {address: '주소', receiver: '수령인', contact: '010-0000-0000'}, firstBookTitle: 대표 도서 제목, totalQuantity: 총 수량, totalPrice: 총 금액, userId: 회원 id } |
 | **Response Body**    |                                                  |
 
 ### 주문 내역 조회
@@ -210,7 +210,7 @@
 | **URI**              | /orders                                          |
 | **HTTP status code** | Success: 200, Fail: 404                          |
 | **Request Body**     |                                                  |
-| **Response Body**    | [ { order_id: 주문 id, created_at: '주문 일자', delivery: {address: '주소', receiver: '수령인', contact: '010-0000-0000'}, bookTitle: '대표 책 제목', totalPrice: 총 금액, totalCount: 총 수량 }, ... ] |
+| **Response Body**    | [ { order_id: 주문 id, created_at: '주문 일자', delivery: {address: '주소', receiver: '수령인', contact: '010-0000-0000'}, bookTitle: '대표 책 제목', totalPrice: 총 금액, totalQauntity: 총 수량 }, ... ] |
 
 ### 주문 내역 상품 상세 조회
 
@@ -219,7 +219,7 @@
 | **URI**              | /orders/{orderId}                                |
 | **HTTP status code** | Success: 200, Fail: 404                          |
 | **Request Body**     |                                                  |
-| **Response Body**    | [{ bookId: 도서 id, book_title: '도서 제목', author: '작가명', price: 가격, count: 수량 }, ... ] |
+| **Response Body**    | [{ bookId: 도서 id, book_title: '도서 제목', author: '작가명', price: 가격, Quantity: 수량 }, ... ] |
 
 </details>
 
