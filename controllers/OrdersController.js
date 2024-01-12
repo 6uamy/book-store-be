@@ -1,4 +1,4 @@
-//const conn = require('../mariadb');
+// const conn = require('../mariadb');
 const mariadb = require('mysql2/promise');
 const {StatusCodes} = require('http-status-codes');
 
@@ -50,8 +50,24 @@ const deleteCartItems = async (conn, items) => {
     return await conn.query(sql, [items]);
 }
 
-const getOrders = (req, res) => {
-    res.json('주문 내역 조회');
+const getOrders = async (req, res) => {
+    const conn = await mariadb.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'Bookshop',
+        dateStrings: true 
+    });
+
+    const {userId} = req.body;
+
+    let sql = `SELECT O.id, O.created_at, D.address, D.receiver, D.contact, O.book_title, O.total_quantity, O.total_price
+            FROM orders AS O
+            LEFT JOIN delivery AS D ON O.delivery_id = D.id WHERE user_id = ?`
+
+    let [rows, fields] = await conn.query(sql, userId);
+
+    return res.status(StatusCodes.OK).json(rows);
 };
 
 const getOrderDetail = (req, res) => {
