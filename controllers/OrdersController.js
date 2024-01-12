@@ -26,15 +26,29 @@ const order = async (req, res) => {
     [results] = await conn.execute(sql, values);
     let order_id = results.insertId;
 
+    // SELECT book_id, quantity FROM cartItems WHERE IN [1, 2, 3];
+    sql = `SELECT book_id, quantity FROM cartItems WHERE id IN (?)`;
+    let [orderItems, fields] = await conn.query(sql, [items]);
+
     // INSERT orderedBook
     sql = `INSERT INTO orderedBook (order_id, book_id, quantity) VALUES ?;`
     values = [];
-    items.forEach((item) => {
+    orderItems.forEach((item) => {
         values.push([order_id, item.book_id, item.quantity]);
     });
     [results] = await conn.query(sql, [values]);
+
+    // DELETE cartItems
+    results = await deleteCartItems(conn, items);
+
     return res.status(StatusCodes.OK).json(results);
 };
+
+const deleteCartItems = async (conn, items) => {
+    let sql = `DELETE FROM cartItems WHERE id IN (?)`;
+
+    return await conn.query(sql, [items]);
+}
 
 const getOrders = (req, res) => {
     res.json('주문 내역 조회');
