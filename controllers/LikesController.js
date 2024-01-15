@@ -1,7 +1,7 @@
-var jwt = require('jsonwebtoken');
 const dotenv = require('dotenv').config();
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
+const {ensureAuthorization} = require('../modules/authorizationJWT');
 
 const addLikes = (req, res) => {
     const {book_id} = req.params;
@@ -33,12 +33,6 @@ const cancelLikes = (req, res) => {
 
         return results.affectedRows === 0 ? res.status(StatusCodes.BAD_REQUEST).end() : res.status(StatusCodes.OK).json(results);
     });
-}
-
-function ensureAuthorization(req) {
-    let jwtToken = req.headers['authorization'];
-    
-    return jwt.verify(jwtToken, process.env.PRIVATE_KEY);
 }
 
 module.exports = {addLikes, cancelLikes};
