@@ -1,11 +1,13 @@
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
+const {ensureAuthorization} = require('../modules/authorizationJWT');
 
 const addCartsItem = (req, res) => {
-    const {book_id, quantity, user_id} = req.body;
-
+    const {book_id, quantity} = req.body;
+    const authorizedUser = ensureAuthorization(req);
+    
     const sql = `INSERT INTO cartItems (book_id, quantity, user_id) VALUES (?, ?, ?)`;
-    const values = [book_id, quantity, user_id];
+    const values = [book_id, quantity, authorizedUser.id];
     conn.query(sql, values, (err, results) => {
         if (err) {
             console.log(err);
@@ -17,13 +19,15 @@ const addCartsItem = (req, res) => {
 };
 
 const selectCartsItem = (req, res) => {
-    const {user_id, selected} = req.body;
+    const {selected} = req.body;
+    const authorizedUser = ensureAuthorization(req);
+
     let sql = `SELECT C.id, C.book_id, B.title, B.summary, C.quantity, B.price 
                 FROM cartItems AS C
                 LEFT JOIN books AS B ON C.book_id = B.id 
                 WHERE user_id = ?`;
 
-    const values = [user_id];
+    const values = [authorizedUser.id];
     if (selected) {
         sql +=` AND C.id IN (?)`;
         values.push(selected);
@@ -40,26 +44,10 @@ const selectCartsItem = (req, res) => {
 };
 
 const removeCartsItem = (req, res) => {
-    const {id} = req.params;
+    const cartItemId = req.params.id;
 
     const sql = `DELETE FROM cartItems WHERE id = ?`;
-    conn.query(sql, id, (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(StatusCodes.BAD_REQUEST).end();
-        }
-
-        return results.affectedRows === 0 ? res.status(StatusCodes.BAD_REQUEST).end() : res.status(StatusCodes.OK).json(results);
-    });
-};
-
-const choosedCartItems = (req, res) => {
-    const {id} = req.params;
-
-    const sql = `SELECT * FROM Bookshop.cartItems 
-                WHERE user_id = 1
-                AND id IN (4, 6);`;
-    conn.query(sql, id, (err, results) => {
+    conn.query(sql, cartItemId, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(StatusCodes.BAD_REQUEST).end();
