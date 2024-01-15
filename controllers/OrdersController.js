@@ -1,6 +1,7 @@
 // const conn = require('../mariadb');
 const mariadb = require('mysql2/promise');
 const {StatusCodes} = require('http-status-codes');
+require('dotenv').config();
 
 const order = async (req, res) => {
     const conn = await mariadb.createConnection({
@@ -14,24 +15,23 @@ const order = async (req, res) => {
     const {items, delivery, firstBookTitle, totalQuantity, totalPrice, userId} = req.body;
 
     // INSERT delivery
-    let sql = `INSERT INTO delivery (address, receiver, contact) VALUES (?, ?, ?);`;
+    let sql = process.env.INSERT_DELIVERY;
     let values = [delivery.address, delivery.receiver, delivery.contact]; 
     let [results] = await conn.execute(sql, values);
     let delivery_id = results.insertId;
 
     // INSERT orders
-    sql = `INSERT INTO orders (book_title, total_quantity, total_price, user_id, delivery_id)
-    VALUES (?, ?, ?, ?, ?)`; 
+    sql = process.env.INSERT_ORDERS; 
     values = [firstBookTitle, totalQuantity, totalPrice, userId, delivery_id];
     [results] = await conn.execute(sql, values);
     let order_id = results.insertId;
 
     // SELECT book_id, quantity FROM cartItems WHERE IN [1, 2, 3];
-    sql = `SELECT book_id, quantity FROM cartItems WHERE id IN (?)`;
+    sql = process.env.SELECT_CART_ITEMS_USER;
     let [orderItems, fields] = await conn.query(sql, [items]);
 
     // INSERT orderedBook
-    sql = `INSERT INTO orderedBook (order_id, book_id, quantity) VALUES ?;`
+    sql = process.env.INSERT_ORDERED_BOOK;
     values = [];
     orderItems.forEach((item) => {
         values.push([order_id, item.book_id, item.quantity]);
@@ -45,7 +45,7 @@ const order = async (req, res) => {
 };
 
 const deleteCartItems = async (conn, items) => {
-    let sql = `DELETE FROM cartItems WHERE id IN (?)`;
+    let sql = process.env.DELETE_CART_ITEMS;
 
     return await conn.query(sql, [items]);
 }
@@ -61,9 +61,7 @@ const getOrders = async (req, res) => {
 
     const {userId} = req.body;
 
-    let sql = `SELECT O.id, O.created_at, D.address, D.receiver, D.contact, O.book_title, O.total_quantity, O.total_price
-            FROM orders AS O
-            LEFT JOIN delivery AS D ON O.delivery_id = D.id WHERE user_id = ?`
+    let sql = process.env.SELECT_ORDERS;
 
     let [rows, fields] = await conn.query(sql, userId);
 

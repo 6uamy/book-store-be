@@ -11,7 +11,7 @@ const join = (req, res) => {
     const salt = crypto.randomBytes(10).toString('base64');
     const hashPassword = encryptionPassword(password, salt);
 
-    const sql = `INSERT INTO users (email, password, salt) VALUES (?, ?, ?)`;
+    const sql = process.env.JOIN;
     const values = [email, hashPassword, salt];
     conn.query(sql, values, (err, results) => {
         if (err) {
@@ -26,7 +26,7 @@ const join = (req, res) => {
 const login = (req, res) => {
     const {email, password} = req.body;
 
-    const sql = `SELECT * FROM users WHERE email = ?`;
+    const sql = process.env.LOGIN;
     conn.query(sql, email, (err, results) => {
             if (err) {
                 return res.status(StatusCodes.BAD_REQUEST).end();
@@ -66,7 +66,7 @@ const login = (req, res) => {
 const passwordResetRequest = (req, res) => {
     const {email} = req.body;
 
-    const sql = `SELECT * FROM users WHERE email = ?`;
+    const sql = process.env.REQUEST_PASSWORD_RESET;
     conn.query(sql, email, (err, results) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).end();
@@ -83,7 +83,7 @@ const passwordReset = (req, res) => {
     const salt = crypto.randomBytes(10).toString('base64');
     const hashPassword = encryptionPassword(password, salt);
 
-    const sql = `UPDATE users SET password = ?, salt = ? WHERE email = ?`;
+    const sql = process.env.PASSWORD_RESET;
     let values = [hashPassword, salt, email];
     conn.query(sql, values, (err, results) => {
         if (err) {

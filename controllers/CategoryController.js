@@ -1,8 +1,9 @@
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
+require('dotenv').config();
 
 const allCategory = (req, res) => {
-    const sql = `SELECT * FROM category`;
+    const sql = process.env.SELECT_CATEGORY;
     conn.query(sql, (err, results) => {
         if (err) {
             console.log(err);

@@ -1,13 +1,14 @@
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
 const {ensureAuthorization, checkJWT} = require('../modules/authorizationJWT');
+require('dotenv').config();
 
 const addCartsItem = (req, res) => {
     const {book_id, quantity} = req.body;
     const authorizedUser = ensureAuthorization(req, res);
     checkJWT(authorizedUser, res);
     
-    const sql = `INSERT INTO cartItems (book_id, quantity, user_id) VALUES (?, ?, ?)`;
+    const sql = process.env.ADD_CARTS_ITEM;
     const values = [book_id, quantity, authorizedUser.id];
     conn.query(sql, values, (err, results) => {
         if (err) {
@@ -25,14 +26,11 @@ const selectCartsItem = (req, res) => {
     const authorizedUser = ensureAuthorization(req, res);
     checkJWT(authorizedUser, res);
 
-    let sql = `SELECT C.id, C.book_id, B.title, B.summary, C.quantity, B.price 
-    FROM cartItems AS C
-    LEFT JOIN books AS B ON C.book_id = B.id 
-    WHERE user_id = ?`;
+    let sql = process.env.SELECT_CARTS_ITEM;
 
     const values = [authorizedUser.id];
     if (selected) {
-        sql +=` AND C.id IN (?)`;
+        sql += process.env.SELECTED_CARTS_ITEM;
         values.push(selected);
     }
 
@@ -49,7 +47,7 @@ const selectCartsItem = (req, res) => {
 const removeCartsItem = (req, res) => {
     const cartItemId = req.params.id;
 
-    const sql = `DELETE FROM cartItems WHERE id = ?`;
+    const sql = process.env.DELETE_CARTS_ITEM;
     conn.query(sql, cartItemId, (err, results) => {
         if (err) {
             console.log(err);

@@ -1,23 +1,24 @@
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
+require('dotenv').config();
 
 const allBooks = (req, res) => {
     const {category_id, new_book, limit_books, current_page} = req.query;
     let offset = limit_books * (current_page - 1);
 
-    let sql = `SELECT *, (SELECT COUNT(*) FROM likes WHERE liked_book_id = books.id) AS likes FROM books`;
+    let sql = process.env.SELECT_ALL_BOOKS;
     let values = [Number(limit_books), offset];
 
     if (category_id && new_book) {
         values = [category_id, ...values];
-        JSON.parse(new_book) === true ? sql += ` WHERE category_id = ? AND pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()` : sql += ` WHERE category_id = ?`;
+        JSON.parse(new_book) === true ? sql += process.env.SELECT_CATEGORY_NEW_BOOKS : sql += process.env.SELECT_CATEGORY_BOOKS;
     } else if (category_id) {
         values = [category_id, ...values];
-        sql += ` WHERE category_id = ?`;
+        sql += process.env.SELECT_CATEGORY_BOOKS;
     } else if (new_book) {
-        if (JSON.parse(new_book) === true) sql += ` WHERE pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()`;
+        if (JSON.parse(new_book) === true) sql += process.env.SELECT_NEW_BOOKS;
     }
-    sql += ` LIMIT ? OFFSET ?`;
+    sql += process.env.SELECT_PAGE_BOOKS;
 
     conn.query(sql, values, (err, results) => {
         if (err) {
@@ -32,10 +33,7 @@ const allBooks = (req, res) => {
 const bookDetail = (req, res) => {
     const {user_id} = req.body;
     const book_id = req.params.id;
-    const sql = `SELECT *, 
-                    (SELECT COUNT(*) FROM likes where liked_book_id = books.id) AS likes, 
-                    (SELECT EXISTS (SELECT * FROM likes WHERE user_id = ? AND liked_book_id = ?) AS liked) AS liked 
-                FROM books LEFT JOIN category ON books.category_id = category.category_id WHERE books.id = ?`;
+    const sql = process.env.SELECT_BOOK_DETAIL;
 
     const values = [user_id, book_id, book_id];
     conn.query(sql, values, (err, results) => {

@@ -1,4 +1,4 @@
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
 const {ensureAuthorization, checkJWT} = require('../modules/authorizationJWT');
@@ -8,7 +8,7 @@ const addLikes = (req, res) => {
     const authorizedUser = ensureAuthorization(req, res);
     checkJWT(authorizedUser, res);
 
-    const sql = `INSERT INTO likes (user_id, liked_book_id) VALUES (?, ?)`;
+    const sql = process.env.ADD_LIKES;
     const values = [authorizedUser.id, book_id];
     conn.query(sql, values, (err, results) => {
         if (err) {
@@ -24,8 +24,8 @@ const cancelLikes = (req, res) => {
     const {book_id} = req.params;
     const authorizedUser = ensureAuthorization(req, res);
     checkJWT(authorizedUser, res);
-    
-    const sql = `DELETE FROM likes WHERE user_id = ? AND liked_book_id = ?`;
+
+    const sql = process.env.CANCEL_LIKES;
     const values = [authorizedUser.id, book_id];
     conn.query(sql, values, (err, results) => {
         if (err) {
