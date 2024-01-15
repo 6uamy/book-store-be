@@ -1,12 +1,14 @@
+var jwt = require('jsonwebtoken');
+const dotenv = require('dotenv').config();
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
 
 const addLikes = (req, res) => {
     const {book_id} = req.params;
-    const {user_id} = req.body;
+    const authorizedUser = ensureAuthorization(req);
 
     const sql = `INSERT INTO likes (user_id, liked_book_id) VALUES (?, ?)`;
-    const values = [user_id, book_id];
+    const values = [authorizedUser.id, book_id];
     conn.query(sql, values, (err, results) => {
         if (err) {
             console.log(err);
@@ -19,10 +21,10 @@ const addLikes = (req, res) => {
 
 const cancelLikes = (req, res) => {
     const {book_id} = req.params;
-    const {user_id} = req.body;
+    const authorizedUser = ensureAuthorization(req);
 
     const sql = `DELETE FROM likes WHERE user_id = ? AND liked_book_id = ?`;
-    const values = [user_id, book_id];
+    const values = [authorizedUser.id, book_id];
     conn.query(sql, values, (err, results) => {
         if (err) {
             console.log(err);
@@ -31,6 +33,12 @@ const cancelLikes = (req, res) => {
 
         return results.affectedRows === 0 ? res.status(StatusCodes.BAD_REQUEST).end() : res.status(StatusCodes.OK).json(results);
     });
+}
+
+function ensureAuthorization(req) {
+    let jwtToken = req.headers['authorization'];
+    
+    return jwt.verify(jwtToken, process.env.PRIVATE_KEY);
 }
 
 module.exports = {addLikes, cancelLikes};
