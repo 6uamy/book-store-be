@@ -25,6 +25,7 @@
 | **URI**              | /users/login                                     |
 | **HTTP status code** | Success: 200, Fail: 404                          |     
 | **Request Body**     | { email: "string@mail.com", password: "string" } |
+| **Request Cookie**   | JWT Token (String)                               |
 | **Response Cookie**  | cookie: JWT Token                                |
 
 ### 비밀번호 초기화 요청
@@ -135,6 +136,7 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /likes/{bookId}                                  |
 | **HTTP status code** | Success: 201, Fail: 400                          |
+| **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
 | **Request Body**     |                                                  |
 | **Response Body**    |                                                  |
 
@@ -145,6 +147,7 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /likes/{bookId}                                  |
 | **HTTP status code** | Success: 200, Fail: 400                          |
+| **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
 | **Request Body**     |                                                  |
 | **Response Body**    |                                                  |
 
@@ -159,6 +162,7 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /carts                                           |
 | **HTTP status code** | Success: 201, Fail: 400                          |
+| **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
 | **Request Body**     | { book_id: 도서 id, quantity: 수량 }              |
 | **Response Body**    |                                                  |
 
@@ -174,14 +178,15 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /carts                                           |
 | **HTTP status code** | Success: 200, Fail: 404                          |
-| **Request Body**     | { userId: 회원 id, selected: [cartItemsId, cartItemsId ... ] } |
+| **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
+| **Request Body**     | { selected: [cartItemsId, cartItemsId ... ] } |
 | **Response Body**    | [ { id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 }, <br>{ id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 } ... ] |
 
 ### 장바구니 도서 삭제
 
 | Method               | DELETE                  |
 |----------------------|-------------------------|
-| **URI**              | /carts/{bookId}         |
+| **URI**              | /carts/{cartItemId}     |
 | **HTTP status code** | Success: 200, Fail: 400 |
 | **Request Body**     |                         |
 | **Response Body**    |                         |
