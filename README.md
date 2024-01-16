@@ -205,7 +205,8 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /orders                                          |
 | **HTTP status code** | Success: 200, Fail: 400                          |
-| **Request Body**     | { items: [장바구니 도서 id, ... ], delivery: {address: '주소', receiver: '수령인', contact: '010-0000-0000'}, firstBookTitle: 대표 도서 제목, totalQuantity: 총 수량, totalPrice: 총 금액, userId: 회원 id } |
+| **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
+| **Request Body**     | { items: [장바구니 도서 id, ... ], delivery: {address: '주소', receiver: '수령인', contact: '010-0000-0000'}, firstBookTitle: 대표 도서 제목, totalQuantity: 총 수량, totalPrice: 총 금액 } |
 | **Response Body**    |                                                  |
 
 ### 주문 내역 조회
@@ -214,6 +215,7 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /orders                                          |
 | **HTTP status code** | Success: 200, Fail: 404                          |
+| **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
 | **Request Body**     |                                                  |
 | **Response Body**    | [ { id: 주문 id, created_at: '주문 일자', address: '주소', receiver: '수령인', contact: '010-0000-0000', book_Title: '대표 책 제목', total_Qauntity: 총 수량, total_Price: 총 금액 }, ... ] |
 

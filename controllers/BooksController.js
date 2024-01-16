@@ -1,5 +1,6 @@
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
+const {ensureAuthorization} = require('../modules/authorizationJWT');
 require('dotenv').config();
 
 const allBooks = (req, res) => {
@@ -31,18 +32,27 @@ const allBooks = (req, res) => {
 };
 
 const bookDetail = (req, res) => {
-    const {user_id} = req.body;
     const book_id = req.params.id;
-    const sql = process.env.SELECT_BOOK_DETAIL;
-
-    const values = [user_id, book_id, book_id];
+    const [authorizedUser, error] = ensureAuthorization(req);
+    let sql = process.env.SELECT_BOOK_DETAIL_LOGIN;
+    let values = [authorizedUser.id, book_id, book_id];
+    
+    if (error) {
+        if (error.message === 'jwt must be provided') {
+            sql = process.env.SELECT_BOOK_DETAIL_LOGOUT;
+            values = [book_id];
+        } else {
+            return res.status(StatusCodes.BAD_REQUEST).json(error);
+        }   
+    }
+    
     conn.query(sql, values, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(StatusCodes.BAD_REQUEST).end();
         }
         
-        results[0] ? res.status(StatusCodes.OK).json(results[0]) : res.status(StatusCodes.NOT_FOUND).end();
+        return results[0] ? res.status(StatusCodes.OK).json(results[0]) : res.status(StatusCodes.NOT_FOUND).end();
     });
 };
 

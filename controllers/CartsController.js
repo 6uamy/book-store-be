@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const addCartsItem = (req, res) => {
     const {book_id, quantity} = req.body;
-    const [authorizedUser, err] = ensureAuthorization(req, res);
+    const [authorizedUser, err] = ensureAuthorization(req);
     if (err) return res.status(StatusCodes.BAD_REQUEST).json(err);
 
     const sql = process.env.ADD_CARTS_ITEM;
@@ -23,7 +23,7 @@ const addCartsItem = (req, res) => {
 
 const selectCartsItem = (req, res) => {
     const {selected} = req.body;
-    const [authorizedUser, err] = ensureAuthorization(req, res);
+    const [authorizedUser, err] = ensureAuthorization(req);
     if (err) return res.status(StatusCodes.BAD_REQUEST).json(err);
 
     let sql = process.env.SELECT_CARTS_ITEM;

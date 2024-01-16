@@ -1,7 +1,5 @@
-const { StatusCodes } = require('http-status-codes');
 var jwt = require('jsonwebtoken');
-const dotenv = require('dotenv').config();
-const { TokenExpiredError, JsonWebTokenError } = require('jsonwebtoken');
+require('dotenv').config();
 
 const ensureAuthorization = (req, res) => {    
     try {
