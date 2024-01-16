@@ -7,24 +7,10 @@ const ensureAuthorization = (req, res) => {
     try {
         let jwtToken = req.headers['authorization'];
 
-        return jwt.verify(jwtToken, process.env.PRIVATE_KEY);
+        return [jwt.verify(jwtToken, process.env.PRIVATE_KEY), 0];
     } catch (err) {
-        return err;
+        return [0, err];
     }
 }
 
-const checkJWT = (authorizedUser, res) => {
-    if (authorizedUser instanceof TokenExpiredError) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({
-            "message": "로그인 세션이 만료되었습니다."
-        });
-    } 
-    
-    if (authorizedUser instanceof JsonWebTokenError) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            "message": "토큰 형식이 잘못되었습니다."
-        });
-    }
-}
-
-module.exports = {ensureAuthorization, checkJWT};
+module.exports = {ensureAuthorization};

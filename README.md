@@ -180,7 +180,7 @@
 | **HTTP status code** | Success: 200, Fail: 404                          |
 | **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
 | **Request Body**     | { selected: [cartItemsId, cartItemsId ... ] } |
-| **Response Body**    | [ { id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 }, <br>{ id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", count: 수량, price: 가격 } ... ] |
+| **Response Body**    | [ { id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", quantity: 수량, price: 가격 }, <br>{ id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", quantity: 수량, price: 가격 } ... ] |
 
 ### 장바구니 도서 삭제
 

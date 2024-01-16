@@ -1,12 +1,12 @@
 require('dotenv').config();
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
-const {ensureAuthorization, checkJWT} = require('../modules/authorizationJWT');
+const {ensureAuthorization} = require('../modules/authorizationJWT');
 
 const addLikes = (req, res) => {
     const {book_id} = req.params;
-    const authorizedUser = ensureAuthorization(req, res);
-    checkJWT(authorizedUser, res);
+    const [authorizedUser, err] = ensureAuthorization(req, res);
+    if (err) return res.status(StatusCodes.BAD_REQUEST).json(err);
 
     const sql = process.env.ADD_LIKES;
     const values = [authorizedUser.id, book_id];
@@ -22,8 +22,8 @@ const addLikes = (req, res) => {
 
 const cancelLikes = (req, res) => {
     const {book_id} = req.params;
-    const authorizedUser = ensureAuthorization(req, res);
-    checkJWT(authorizedUser, res);
+    const [authorizedUser, err] = ensureAuthorization(req, res);
+    if (err) return res.status(StatusCodes.BAD_REQUEST).json(err);
 
     const sql = process.env.CANCEL_LIKES;
     const values = [authorizedUser.id, book_id];

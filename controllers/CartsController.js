@@ -1,13 +1,13 @@
 const conn = require('../mariadb');
 const {StatusCodes} = require('http-status-codes');
-const {ensureAuthorization, checkJWT} = require('../modules/authorizationJWT');
+const {ensureAuthorization} = require('../modules/authorizationJWT');
 require('dotenv').config();
 
 const addCartsItem = (req, res) => {
     const {book_id, quantity} = req.body;
-    const authorizedUser = ensureAuthorization(req, res);
-    checkJWT(authorizedUser, res);
-    
+    const [authorizedUser, err] = ensureAuthorization(req, res);
+    if (err) return res.status(StatusCodes.BAD_REQUEST).json(err);
+
     const sql = process.env.ADD_CARTS_ITEM;
     const values = [book_id, quantity, authorizedUser.id];
     conn.query(sql, values, (err, results) => {
@@ -23,8 +23,8 @@ const addCartsItem = (req, res) => {
 
 const selectCartsItem = (req, res) => {
     const {selected} = req.body;
-    const authorizedUser = ensureAuthorization(req, res);
-    checkJWT(authorizedUser, res);
+    const [authorizedUser, err] = ensureAuthorization(req, res);
+    if (err) return res.status(StatusCodes.BAD_REQUEST).json(err);
 
     let sql = process.env.SELECT_CARTS_ITEM;
 
