@@ -1,4 +1,4 @@
-const conn = require('../mariadb');
+const conn = require('../database/mariadb');
 const {StatusCodes} = require('http-status-codes');
 require('dotenv').config();
 

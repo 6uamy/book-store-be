@@ -1,4 +1,4 @@
-const conn = require('../mariadb');
+const conn = require('../database/mariadb');
 const {StatusCodes} = require('http-status-codes');
 const {ensureAuthorization} = require('../modules/authorizationJWT');
 require('dotenv').config();
@@ -46,6 +46,8 @@ const selectCartsItem = (req, res) => {
 
 const removeCartsItem = (req, res) => {
     const cartItemId = req.params.id;
+    const [authorizedUser, err] = ensureAuthorization(req);
+    if (err) return res.status(StatusCodes.BAD_REQUEST).json(err);
 
     const sql = process.env.DELETE_CARTS_ITEM;
     conn.query(sql, cartItemId, (err, results) => {

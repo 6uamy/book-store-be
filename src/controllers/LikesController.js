@@ -1,7 +1,7 @@
 require('dotenv').config();
-const conn = require('../mariadb');
+const conn = require('../database/mariadb');
 const {StatusCodes} = require('http-status-codes');
-const {ensureAuthorization, checkJWT} = require('../modules/authorizationJWT');
+const {ensureAuthorization} = require('../modules/authorizationJWT');
 
 const addLikes = (req, res) => {
     const {book_id} = req.params;

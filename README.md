@@ -67,10 +67,10 @@
 
 | Method               | GET                      |
 |----------------------|--------------------------|
-| **URI**              | /books?limit_books={page당 도서 수}&current_page={현재 page} |
+| **URI**              | /books?limitBooks={page당 도서 수}&currentPage={현재 page} |
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     |                          |
-| **Response Body**    | [ { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일"} ... ] |
+| **Response Body**    | { books: [ { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일"} ... ], pagination: { currentPage: 현재 페이지, totalCount: 총 도서 수 } } |
 
 ### 개별 도서 조회
 
@@ -92,21 +92,21 @@
 |----------------------|--------------------------|
 | **URI**              | /books/{bookId}          |
 | **HTTP status code** | Success: 200, Fail: 404  |
+| **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
 | **Request Body**     |                          |
-| **Response Body**    | { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), category: "카테고리", format: "포맷", ISBN: ISBN, summary: "요약 정보", description: "상세 설명" , author: "작가", pages: 쪽 수, index: "목차", price: 가격, likes: 좋아요 수, pubDate: "출간일" } |
+| **Response Body**    | { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), category: "카테고리", format: "포맷", ISBN: ISBN, summary: "요약 정보", description: "상세 설명" , author: "작가", pages: 쪽 수, contents: "목차", price: 가격, likes: 좋아요 수, liked: 좋아요 여부(로그인 시), pubDate: "출간일" } |
 
 ### 카테고리별 도서 목록 조회
 
 - 페이징 필요
 - new: true => 신간 조회 (기준: 출간일 1달 이내)
 
-
 | Method               | GET                      |
 |----------------------|--------------------------|
-| **URI**              | /books?category_id={category_id}&new_book={boolean} |
+| **URI**              | /books?categoryId={categoryId}&newBook={boolean}&limitBooks={page당 도서 수}&currentPage={현재 page} |
 | **HTTP status code** | Success: 200, Fail: 404  |
 | **Request Body**     |                          |
-| **Response Body**    | [ { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" } ... ] |
+| **Response Body**    | { books: [ { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일" },<br> { id: 도서 id, title: "제목", img: 이미지 id(piksum image #id), summary: "요약 정보", author: "작가", price: 가격, likes: 좋아요 수, pubDate: "출간일"} ... ], pagination: { currentPage: 현재 페이지, totalCount: 총 도서 수 } } |
 
 </details>
 
@@ -115,7 +115,6 @@
 
 ### 카테고리 전체 조회
 
-- 페이징 필요
 - 메인 페이지
 
 | Method               | GET                      |
@@ -163,7 +162,7 @@
 | **URI**              | /carts                                           |
 | **HTTP status code** | Success: 201, Fail: 400                          |
 | **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
-| **Request Body**     | { book_id: 도서 id, quantity: 수량 }              |
+| **Request Body**     | { bookId: 도서 id, quantity: 수량 }               |
 | **Response Body**    |                                                  |
 
 ### 장바구니 조회 / 선택한 장바구니 상품 목록 조회
@@ -180,7 +179,7 @@
 | **HTTP status code** | Success: 200, Fail: 404                          |
 | **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
 | **Request Body**     | { selected: [cartItemsId, cartItemsId ... ] } |
-| **Response Body**    | [ { id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", quantity: 수량, price: 가격 }, <br>{ id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", quantity: 수량, price: 가격 } ... ] |
+| **Response Body**    | [ { id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", quantity: 수량, price: 가격 }, <br> { id: 장바구니 도서 id, bookId: 도서 id, title: "도서 제목", summary: "요약 정보", quantity: 수량, price: 가격 } ... ] |
 
 ### 장바구니 도서 삭제
 
@@ -217,7 +216,7 @@
 | **HTTP status code** | Success: 200, Fail: 404                          |
 | **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
 | **Request Body**     |                                                  |
-| **Response Body**    | [ { id: 주문 id, created_at: '주문 일자', address: '주소', receiver: '수령인', contact: '010-0000-0000', book_Title: '대표 책 제목', total_Qauntity: 총 수량, total_Price: 총 금액 }, ... ] |
+| **Response Body**    | [ { id: 주문 id, createdAt: '주문 일자', address: '주소', receiver: '수령인', contact: '010-0000-0000', bookTitle: '대표 책 제목', totalQauntity: 총 수량, totalPrice: 총 금액 }, ... ] |
 
 ### 주문 내역 상품 상세 조회
 
@@ -225,8 +224,9 @@
 |----------------------|--------------------------------------------------|
 | **URI**              | /orders/{orderId}                                |
 | **HTTP status code** | Success: 200, Fail: 404                          |
+| **Request Headers**  | "Authorization": 로그인 시 받은 JWT Token (String)|
 | **Request Body**     |                                                  |
-| **Response Body**    | [{ bookId: 도서 id, book_title: '도서 제목', author: '작가명', price: 가격, Quantity: 수량 }, ... ] |
+| **Response Body**    | [{ bookId: 도서 id, bookTitle: '도서 제목', author: '작가명', price: 가격, Quantity: 수량 }, ... ] |
 
 </details>
 

@@ -74,6 +74,8 @@ const getOrders = async (req, res) => {
 };
 
 const getOrderDetail = async (req, res) => {
+    const [authorizedUser, err] = ensureAuthorization(req);
+    if (err) return res.status(StatusCodes.BAD_REQUEST).json(err);
     const orderId = req.params.id;
 
     const conn = await mariadb.createConnection({
