@@ -1,5 +1,5 @@
 const conn = require('../database/mariadb');
-const {StatusCodes} = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 require('dotenv').config();
 
 const allCategory = (req, res) => {
@@ -9,9 +9,11 @@ const allCategory = (req, res) => {
             console.log(err);
             return res.status(StatusCodes.BAD_REQUEST).end();
         }
-        
-        results.length ? res.status(StatusCodes.OK).json(results) : res.status(StatusCodes.NOT_FOUND).end();
+
+        results.length
+            ? res.status(StatusCodes.OK).json(results)
+            : res.status(StatusCodes.NOT_FOUND).end();
     });
 };
 
-module.exports = {allCategory};
+module.exports = { allCategory };
